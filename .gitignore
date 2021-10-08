@@ -1,0 +1,6 @@
+
+*.hcl
+.terraform/providers/registry.terraform.io/hashicorp/kubernetes/2.5.0/darwin_amd64/terraform-provider-kubernetes_v2.5.0_x5
+config
+terraform.tfstate
+terraform.tfstate.backup
