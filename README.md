@@ -9,7 +9,7 @@ this is a simple example for k8s and terraform test. It run in your local PC.
 5. config k8s
     
     ```
-        kubectl config use-context docker-for-desktop
+    kubectl config use-context docker-for-desktop
     ```
 6. build docker image.
     
