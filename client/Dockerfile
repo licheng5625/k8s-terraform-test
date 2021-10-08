@@ -2,5 +2,5 @@ FROM python:3
 
 ADD client.py /
 
-EXPOSE 5000
+EXPOSE 6000
 CMD [ "python", "./client.py" ]

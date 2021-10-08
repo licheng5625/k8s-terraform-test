@@ -27,7 +27,7 @@ resource "kubernetes_service" "tcp-service" {
       target_port = 5000
     }
 
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 }
 
@@ -50,6 +50,8 @@ resource "kubernetes_deployment" "server" {
             labels= {  app = "tcp-server" }
         }
        spec {
+            dns_policy = "ClusterFirst"
+            restart_policy =  "Always"
             container {
               image = "tcp-server:latest"
               name  = "tcp-server-container"
@@ -85,6 +87,8 @@ resource "kubernetes_deployment" "client" {
             labels= {  app = "tcp-client" }
         }
        spec {
+            dns_policy = "ClusterFirst"
+            restart_policy =  "Always"
             container {
               image = "tcp-client:latest"
               name  = "tcp-client-container"
@@ -120,6 +124,8 @@ resource "kubernetes_deployment" "client2" {
             labels= {  app = "tcp-client-second" }
         }
        spec {
+            dns_policy = "ClusterFirst"
+            restart_policy =  "Always"
             container {
               image = "tcp-client:latest"
               name  = "tcp-client-container"
@@ -132,4 +138,20 @@ resource "kubernetes_deployment" "client2" {
         }
     }
   }
+}
+
+
+resource "kubernetes_network_policy" "server-default-deny-all" {
+  count    = 0
+
+  metadata {
+    name      = "server-default-deny-all"
+    namespace = "default"
+  }
+
+  spec {
+    pod_selector {}
+    policy_types = ["Ingress", "Egress"]
+  }
+
 }

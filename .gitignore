@@ -4,3 +4,7 @@
 config
 terraform.tfstate
 terraform.tfstate.backup
+*.backup
+*.gz
+*.sha256sum
+minikube-darwin-amd64
