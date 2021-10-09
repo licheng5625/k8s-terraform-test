@@ -1,12 +1,16 @@
 import socket
+import os
 import logging
 from random import randrange
 import time
-HOST = 'tcp-service.default.svc.cluster.local'  # The server's hostname or IP address
-PORT = 6000       # The port used by the server
+#HOST = 'tcp-service.default.svc.cluster.local'  # The server's hostname or IP address
+HOST = os.getenv("HOST_URL", None)
+#PORT = 6000       # The port used by the server
+PORT = int(os.getenv("HOST_PORT", None))
 while True:
+    data = None
     sleepTime = randrange(10)
-    logging.warning("Connecting to " + HOST)
+    logging.warning("Try to connecting to " + HOST)
     try:
         ip_addres = socket.gethostbyname(HOST)
     except socket.gaierror:
@@ -21,6 +25,10 @@ while True:
             data = s.recv(1024)
     except ConnectionRefusedError:
         logging.error("Connection Refused ")
-    time.sleep(sleepTime)
+    except TimeoutError:
+           logging.error("Connection Time Out   ")
 
-    logging.warning("Received %s" %(repr(data)))
+   
+    if data is not None:
+        logging.warning("Received %s" %(repr(data)))
+    time.sleep(sleepTime)

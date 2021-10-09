@@ -28,7 +28,10 @@ this is a simple example for k8s and terraform test. It run in your local PC.
     ```
     docker build -f Dockerfile -t tcp-client .
     ```
-
+6. run minikube 
+    ```
+    minikube start --cni=cilium --memory=4096
+    ```
 ## Use Terraform
 
 Copy the config file to the local folder, you can find the file inside lens (right click the cluster icon, setting ). Modify the `main.tf`. In side the root folder, run 

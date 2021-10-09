@@ -1,5 +1,5 @@
 provider "kubernetes" {
-    config_path = "./config"
+    config_path = "/Users/D067229/.kube/config"
 }
 
 resource "kubernetes_namespace" "client" {
@@ -81,7 +81,7 @@ resource "kubernetes_deployment" "client" {
           app = "tcp-client"
         }
     }
-    replicas = 3
+    replicas = 1
     template{
         metadata {
             labels= {  app = "tcp-client" }
@@ -118,7 +118,7 @@ resource "kubernetes_deployment" "client2" {
           app = "tcp-client-second"
         }
     }
-    replicas = 3
+    replicas = 1
     template{
         metadata {
             labels= {  app = "tcp-client-second" }
@@ -133,7 +133,14 @@ resource "kubernetes_deployment" "client2" {
               port {
                     container_port = 6000
               }
-
+              env{
+                     name  = "HOST_URL"
+                     value = "tcp-service.default.svc.cluster.local"
+              }
+              env{
+                     name  = "HOST_PORT"
+                     value = 6000
+              }
             }
         }
     }
@@ -142,7 +149,7 @@ resource "kubernetes_deployment" "client2" {
 
 
 resource "kubernetes_network_policy" "server-default-deny-all" {
-  count    = 0
+  count    = 1
 
   metadata {
     name      = "server-default-deny-all"
@@ -151,6 +158,8 @@ resource "kubernetes_network_policy" "server-default-deny-all" {
 
   spec {
     pod_selector {}
+    ingress {} # single empty rule to allow all egress traffic
+
     policy_types = ["Ingress", "Egress"]
   }
 
